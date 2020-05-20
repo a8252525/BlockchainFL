@@ -37,6 +37,22 @@ public:
   }
 
   [[eosio::action]]
+  void upsert2(name user, std::string last_name) {
+    require_auth( user );
+    address_index addresses( get_self(), get_first_receiver().value );
+    auto iterator = addresses.find(user.value);
+
+      addresses.modify(iterator, user, [&]( auto& row ) {
+       row.key = user;
+       row.last_name = last_name;
+      //  row.last_name = last_name;
+      //  row.street = street;
+      //  row.city = city;
+      //  row.state = state;
+      });
+  }
+  
+  [[eosio::action]]
   void erase(name user) {
     require_auth(user);
 

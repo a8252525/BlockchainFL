@@ -9,7 +9,7 @@ public:
   addressbook(name receiver, name code,  datastream<const char*> ds): contract(receiver, code, ds) {}
 
   [[eosio::action]]
-  void upsert(name user, std::string first_name, std::string last_name) {
+  void upsert(name user, std::string first_name) {
     require_auth( user );
     address_index addresses( get_self(), get_first_receiver().value );
     auto iterator = addresses.find(user.value);
@@ -18,22 +18,22 @@ public:
       addresses.emplace(user, [&]( auto& row ) {
        row.key = user;
        row.first_name = first_name;
-       row.last_name = last_name;
+      //  row.last_name = last_name;
       //  row.street = street;
       //  row.city = city;
       //  row.state = state;
       });
     }
-    else {
-      addresses.modify(iterator, user, [&]( auto& row ) {
-        row.key = user;
-        row.first_name = first_name;
-        row.last_name = last_name;
-        // row.street = street;
-        // row.city = city;
-        // row.state = state;
-      });
-    }
+  //   else {
+  //     addresses.modify(iterator, user, [&]( auto& row ) {
+  //       row.key = user;
+  //       row.first_name = first_name;
+  //       row.last_name = last_name;
+  //       row.street = street;
+  //       row.city = city;
+  //       row.state = state;
+  //     });
+  //   }
   }
 
   [[eosio::action]]
